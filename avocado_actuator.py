@@ -1,4 +1,5 @@
 from math import degrees
+from enum import Enum
 
 class PosUnit(Enum):
   DEGREES = 1
