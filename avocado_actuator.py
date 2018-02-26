@@ -130,10 +130,11 @@ class Communicator:
         message (any): Placeholder argument/type for user message
 
       Returns:
-        Placeholder for now
+        1 for success (placeholder)
     """
     cmd: str = str(addr) + ' ' + message
     ser.write(cmd)
+		return 1
 
   def _read_from_mcu(self):
     """
@@ -143,6 +144,6 @@ class Communicator:
         message (any): Placeholder argument/type for now
 
       Returns:
-        Placeholder for now
+        the contents of the receive buffer
     """
     return ser.readlines()
