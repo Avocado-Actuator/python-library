@@ -18,7 +18,7 @@ class Communicator:
       		'/dev/ttyACM0', on windows like 'COM3'
       pos_unit (PosUnit): Unit for position
       vel_unit (VelUnit): Unit for velocity
-      ser: The Serial object for serial communication
+      ser: The Serial object for serial communication (timeout arbitrarilly set to 0.01s)
 
     TODO:
       - Specify types of message (probably just strings but maybe worth discussing)
@@ -32,6 +32,9 @@ class Communicator:
     self.vel_unit = vel_unit
     self.ser = serial.Serial(port_num, timeout=0.01)
 
+  def __del__(self):
+  	ser.close()
+  
   def _convert_pos_to_degrees(self, pos: float) -> float:
     """
       Allow users to specify multiple units but simplify MCU communications by
@@ -64,10 +67,10 @@ class Communicator:
 
     # currently pretending send_to_mcu accepts strings
     pos_message: str = f'some message here plus insert given pos {pos}'
-    send_to_mcu(addr, pos_message)
+    _send_to_mcu(addr, pos_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = read_from_mcu()
+    response: str = _read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
     return response == 'some message'
 
@@ -89,10 +92,10 @@ class Communicator:
 
     # currently pretending send_to_mcu accepts strings
     vel_message: str = f'some message here plus insert given vel {vel}'
-    send_to_mcu(addr, vel_message)
+    _send_to_mcu(addr, vel_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = read_from_mcu()
+    response: str = _read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
     return response == 'some message'
 
@@ -111,14 +114,14 @@ class Communicator:
 
     # currently pretending send_to_mcu accepts strings
     cur_message: str = f'some message here plus insert given cur {cur}'
-    send_to_mcu(addr, cur_message)
+    _send_to_mcu(addr, cur_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = read_from_mcu()
+    response: str = _read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
     return response == 'some message'
 
-  def send_to_mcu(self, addr: int, message: any):
+  def _send_to_mcu(self, addr: int, message: any):
     """
       Currently unimplemented, purpose is to serialize and send a message to MCU
 
@@ -129,9 +132,10 @@ class Communicator:
       Returns:
         Placeholder for now
     """
-    cmd: str = str(addr) + message
+    cmd: str = str(addr) + ' ' + message
+    ser.write(cmd)
 
-  def read_from_mcu(self):
+  def _read_from_mcu(self):
     """
       Currently unimplemented, purpose is to receive messages from MCU
 
@@ -141,4 +145,4 @@ class Communicator:
       Returns:
         Placeholder for now
     """
-    pass
+    return ser.readlines()
