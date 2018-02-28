@@ -18,7 +18,7 @@ class Communicator:
       		'/dev/ttyACM0', on windows like 'COM3'
       pos_unit (PosUnit): Unit for position
       vel_unit (VelUnit): Unit for velocity
-      ser: The Serial object for serial communication (timeout arbitrarilly set to 0.01s)
+      ser: The Serial object for serial communication (timeout arbitrarily set to 0.01s)
 
     TODO:
       - Specify types of message (probably just strings but maybe worth discussing)
@@ -147,3 +147,12 @@ class Communicator:
         the contents of the receive buffer
     """
     return ser.readlines()
+
+if __name__ == "__main__":
+	main()
+
+def main():
+	print("\n*** Running main function ***\n")
+	comm = Communicator('COM4')
+	com._send_to_mcu(1337, 'hello world')
+	s = com._read_from_mcu()
