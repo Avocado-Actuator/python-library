@@ -33,7 +33,7 @@ class Communicator:
     self.ser = serial.Serial(port_num, timeout=0.01)
 
   def __del__(self):
-  	ser.close()
+  	self.ser.close()
   
   def _convert_pos_to_degrees(self, pos: float) -> float:
     """
@@ -49,7 +49,7 @@ class Communicator:
     """
     return pos if self.pos_unit == PosUnit.DEGREES else degrees(pos)
 
-  def rotate_to_position(self, addr: int, pos: float) -> bool:
+  def rotate_to_position(self, addr: int, pos: float) -> list:
     """
       Rotates actuator given by addr to postion given by pos
 
@@ -66,15 +66,16 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    pos_message: str = f'some message here plus insert given pos {pos}'
-    _send_to_mcu(addr, pos_message)
+    # pos_message: str = f'some message here plus insert given pos {pos}'
+    pos_message: str = 'pos ' + str(pos)
+    self._send_to_mcu(addr, pos_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = _read_from_mcu()
+    response: str = self._read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
-    return response == 'some message'
+    return response
 
-  def rotate_at_velocity(self, addr: int, vel: float) -> bool:
+  def rotate_at_velocity(self, addr: int, vel: float) -> list:
     """
       Rotates actuator given by addr at velocity given by vel
 
@@ -91,15 +92,16 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    vel_message: str = f'some message here plus insert given vel {vel}'
-    _send_to_mcu(addr, vel_message)
+    # vel_message: str = f'some message here plus insert given vel {vel}'
+    vel_message: str = 'vel ' + str(vel)
+    self._send_to_mcu(addr, vel_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = _read_from_mcu()
+    response: str = self._read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
-    return response == 'some message'
+    return response
 
-  def rotate_at_current(self, addr: int, cur: float) -> bool:
+  def rotate_at_current(self, addr: int, cur: float) -> list:
     """
       Rotates actuator given by addr at current given by cur
 
@@ -113,13 +115,14 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    cur_message: str = f'some message here plus insert given cur {cur}'
-    _send_to_mcu(addr, cur_message)
+    # cur_message: str = f'some message here plus insert given cur {cur}'
+    cur_message: str = 'cur ' + str(cur)
+    self._send_to_mcu(addr, cur_message)
 
     # currently pretending read_from_mcu returns strings
-    response: str = _read_from_mcu()
+    response: str = self._read_from_mcu()
     # in reality unlikely there will only be two possible messages we care about
-    return response == 'some message'
+    return response
 
   def _send_to_mcu(self, addr: int, message: any):
     """
@@ -133,8 +136,8 @@ class Communicator:
         1 for success (placeholder)
     """
     cmd: str = str(addr) + ' ' + message
-    ser.write(cmd)
-		return 1
+    self.ser.write(cmd.encode('utf-8'))
+    return 1
 
   def _read_from_mcu(self):
     """
@@ -146,13 +149,14 @@ class Communicator:
       Returns:
         the contents of the receive buffer
     """
-    return ser.readlines()
-
-if __name__ == "__main__":
-	main()
+    return self.ser.readlines()
 
 def main():
 	print("\n*** Running main function ***\n")
-	comm = Communicator('COM4')
-	com._send_to_mcu(1337, 'hello world')
-	s = com._read_from_mcu()
+	comm = Communicator('/dev/ttyACM0') #replace with the port the MCU is connected to!
+	s = comm.rotate_at_velocity(1337, 50.0)
+	print(s)
+	del comm
+
+if __name__ == "__main__":
+	main()
