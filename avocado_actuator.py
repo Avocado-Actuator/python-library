@@ -30,7 +30,7 @@ class Communicator:
     self.port_num = port_num
     self.pos_unit = pos_unit
     self.vel_unit = vel_unit
-    self.ser = serial.Serial(port_num, timeout=0.01)
+    self.ser = serial.Serial(port_num, 115200, timeout=0.01)
 
   def __del__(self):
   	self.ser.close()
