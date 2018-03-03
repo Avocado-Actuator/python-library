@@ -30,7 +30,7 @@ class Communicator:
     self.port_num = port_num
     self.pos_unit = pos_unit
     self.vel_unit = vel_unit
-    self.ser = serial.Serial(port_num, timeout=0.01)
+    self.ser = serial.Serial(port_num, 115200, timeout=0.01)
 
   def __del__(self):
   	self.ser.close()
@@ -153,7 +153,7 @@ class Communicator:
 
 def main():
 	print("\n*** Running main function ***\n")
-	comm = Communicator('/dev/ttyACM0') #replace with the port the MCU is connected to!
+	comm = Communicator('COM7') #replace with the port the MCU is connected to!
 	s = comm.rotate_at_velocity(1337, 50.0)
 	print(s)
 	del comm
