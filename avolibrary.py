@@ -73,7 +73,6 @@ class Communicator:
 		# currently pretending send_to_mcu accepts strings
 		pos_message: str = f'setpos {pos}'
 		self._send_to_mcu(addr, pos_message)
-		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -100,7 +99,6 @@ class Communicator:
 		# vel_message: str = f'some message here plus insert given vel {vel}'
 		vel_message: str = f'setvel {vel}'
 		self._send_to_mcu(addr, vel_message)
-		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -123,7 +121,6 @@ class Communicator:
 		# currently pretending send_to_mcu accepts strings
 		cur_message: str = 'setcur {cur}'
 		self._send_to_mcu(addr, cur_message)
-		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -140,7 +137,6 @@ class Communicator:
 				str: the response of the mcu
 		"""
 		self._send_to_mcu(addr, 'getpos')
-		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 
@@ -155,7 +151,6 @@ class Communicator:
 				str: the response of the mcu
 		"""
 		self._send_to_mcu(addr, 'getvel')
-		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 
@@ -170,7 +165,6 @@ class Communicator:
 				str: the response of the mcu
 		"""
 		self._send_to_mcu(addr, 'getcur')
-		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 
@@ -200,37 +194,16 @@ class Communicator:
 
 def main():
 	print("\n*** Running main function ***\n")
-  comm = Communicator('COM7') # replace with the port the MCU is connected to!
+	# replace with the port the MCU is connected to
+	comm = Communicator('COM7') # Windows
+	# comm = Communicator('/dev/tty.usbmodem0F008D61') # macOS
+
 	print(comm.rotate_at_velocity(1337, 50.0))
-	time.sleep(0.5)
 	print(comm.rotate_at_current(1337, 50.0))
-	time.sleep(0.5)
 	print(comm.rotate_to_position(1337, 50.0))
-	time.sleep(0.5)
 	print(comm.get_velocity(1337))
-	time.sleep(0.5)
 	print(comm.get_position(1337))
-	time.sleep(0.5)
 	print(comm.get_current(1337))
-	time.sleep(0.5)
-	# comm._send_to_mcu(0, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
-	# comm._send_to_mcu(1, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
-	# comm._send_to_mcu(2, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
-	# comm._send_to_mcu(3, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
-	# comm._send_to_mcu(4, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
-	# comm._send_to_mcu(5, '')
-	# time.sleep(0.5)
-	# print(comm._read_from_mcu())
 	del comm
 
 if __name__ == "__main__":
