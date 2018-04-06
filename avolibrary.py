@@ -1,6 +1,7 @@
 from math import degrees
 from enum import Enum
 import serial
+import time
 
 class PosUnit(Enum):
 	DEGREES = 1
@@ -30,7 +31,7 @@ class Communicator:
 		self.port_num = port_num
 		self.pos_unit = pos_unit
 		self.vel_unit = vel_unit
-		self.ser = serial.Serial(port_num, 115200, timeout=0.01)
+		self.ser = serial.Serial(port_num, 115200, timeout=0.05)
 
 	def __del__(self):
 		self.ser.close()
@@ -69,7 +70,7 @@ class Communicator:
 		# pos_message: str = f'some message here plus insert given pos {pos}'
 		pos_message: str = 'setpos ' + str(pos)
 		self._send_to_mcu(addr, pos_message)
-
+		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -95,7 +96,7 @@ class Communicator:
 		# vel_message: str = f'some message here plus insert given vel {vel}'
 		vel_message: str = 'setvel ' + str(vel)
 		self._send_to_mcu(addr, vel_message)
-
+		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -118,7 +119,7 @@ class Communicator:
 		# cur_message: str = f'some message here plus insert given cur {cur}'
 		cur_message: str = 'setcur ' + str(cur)
 		self._send_to_mcu(addr, cur_message)
-
+		time.sleep(0.5)
 		# currently pretending read_from_mcu returns strings
 		response: str = self._read_from_mcu()
 		# in reality unlikely there will only be two possible messages we care about
@@ -135,6 +136,7 @@ class Communicator:
 				list: list holding the string containing the position
 		"""
 		self._send_to_mcu(addr, 'getpos')
+		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 	
@@ -149,6 +151,7 @@ class Communicator:
 				list: list holding the string containing the velocity
 		"""
 		self._send_to_mcu(addr, 'getvel')
+		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 	
@@ -163,6 +166,7 @@ class Communicator:
 				list: list holding the string containing the current
 		"""
 		self._send_to_mcu(addr, 'getcur')
+		time.sleep(0.5)
 		response: str = self._read_from_mcu()
 		return response
 
@@ -177,7 +181,7 @@ class Communicator:
 			Returns:
 				1 for success (placeholder)
 		"""
-		cmd: str = str(addr) + ' ' + message
+		cmd: str = str(addr) + ' ' + message + ' '
 		self.ser.write(cmd.encode('utf-8'))
 		return 1
 
@@ -195,13 +199,37 @@ class Communicator:
 
 def main():
 	print("\n*** Running main function ***\n")
-	comm = Communicator('COM7') #replace with the port the MCU is connected to!
+	comm = Communicator('COM5') #replace with the port the MCU is connected to!
 	print(comm.rotate_at_velocity(1337, 50.0))
+	time.sleep(0.5)
 	print(comm.rotate_at_current(1337, 50.0))
+	time.sleep(0.5)
 	print(comm.rotate_to_position(1337, 50.0))
+	time.sleep(0.5)
 	print(comm.get_velocity(1337))
+	time.sleep(0.5)
 	print(comm.get_position(1337))
+	time.sleep(0.5)
 	print(comm.get_current(1337))
+	time.sleep(0.5)
+	# comm._send_to_mcu(0, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
+	# comm._send_to_mcu(1, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
+	# comm._send_to_mcu(2, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
+	# comm._send_to_mcu(3, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
+	# comm._send_to_mcu(4, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
+	# comm._send_to_mcu(5, '')
+	# time.sleep(0.5)
+	# print(comm._read_from_mcu())
 	del comm
 
 if __name__ == "__main__":
