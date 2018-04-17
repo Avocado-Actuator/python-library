@@ -27,7 +27,7 @@ class Communicator:
   """
   def __init__(self, port_num: str, pos_unit: PosUnit = PosUnit.RADIANS, vel_unit: VelUnit = VelUnit.RPS) -> None:
     """Constructor simply setting attributes"""
-    self.port_num: int = port_num
+    self.port_num: str = port_num
     self.pos_unit: PosUnit = pos_unit
     self.vel_unit: VelUnit = vel_unit
     self.ser: serial.Serial = serial.Serial(port_num, 9600, timeout=0.05)
