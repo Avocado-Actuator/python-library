@@ -181,8 +181,16 @@ class Communicator:
 
 def main():
   print("\n*** Running main function ***\n")
-  # replace with the port the MCU is connected to
-  comm = Communicator('COM7') # windows
+  # placeholder port
+  port = 'COM5'
+  if len(sys.argv) > 1:
+    arg = sys.argv[1]
+    if arg in ['win', 'mac']:
+      port = '/dev/tty.usbserial-FTJRNS8A' if arg == 'mac' else 'COM5'
+    else:
+      port = arg
+
+  comm = Communicator(port)
 
   print(comm.rotate_at_velocity(1337, 50.0))
   print(comm.rotate_at_current(1337, 50.0))
