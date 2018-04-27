@@ -3,6 +3,8 @@ from enum import Enum
 from typing import Any
 import serial, time, sys
 
+STOP_BYTE = '!'
+
 class PosUnit(Enum):
   RADIANS = 1 # prefer radians based on project specifications
   DEGREES = 2
@@ -30,7 +32,7 @@ class Communicator:
     self.port_num: str = port_num
     self.pos_unit: PosUnit = pos_unit
     self.vel_unit: VelUnit = vel_unit
-    self.ser: serial.Serial = serial.Serial(port_num, 9600, timeout=0.05)
+    self.ser: serial.Serial = serial.Serial(port_num, 115200, timeout=0.05)
 
   def __del__(self) -> None:
     self.ser.close()
@@ -111,7 +113,7 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    cur_message: str = 'setcur {cur}'
+    cur_message: str = f'setcur {cur}'
     self._send_to_mcu(addr, cur_message)
     # currently pretending read_from_mcu returns strings
     response: str = self._read_from_mcu()
@@ -167,7 +169,7 @@ class Communicator:
       Returns:
         true for success (placeholder)
     """
-    cmd: str = f'{addr} {message}'
+    cmd: str = f'{addr} {message}{STOP_BYTE}'
     self.ser.write(cmd.encode('utf-8'))
     return True
 
@@ -177,7 +179,8 @@ class Communicator:
       Returns:
         the contents of the receive buffer
     """
-    return self.ser.readlines()
+    lines = self.ser.readlines()
+    return lines[0] if len(lines) == 1 else lines
 
 def main():
   print("\n*** Running main function ***\n")
