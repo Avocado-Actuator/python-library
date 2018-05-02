@@ -216,6 +216,7 @@ def main():
   print(comm.get_velocity(1))
   print(comm.get_position(1))
   print(comm.get_current(1))
+  print(comm.get_temperature(1))
   del comm
 
 if __name__ == "__main__":
