@@ -159,6 +159,19 @@ class Communicator:
     response: str = self._read_from_mcu()
     return response
 
+  def get_temperature(self, addr: int) -> str:
+    """Returns the temperature the actuator is operating at
+
+      Args:
+        addr: identifier for specific actuator
+
+      Returns:
+        the response of the mcu
+    """
+    self._send_to_mcu(addr, 'get tmp')
+    response: str = self._read_from_mcu()
+    return response
+
   def _send_to_mcu(self, addr: int, message: str) -> bool:
     """Serialize and send a message to MCU
 
