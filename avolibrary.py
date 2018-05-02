@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Any
 import serial, time, sys
 
-STOP_BYTE = '!'
+STOP_BYTE = '\0'
 
 class PosUnit(Enum):
   RADIANS = 1 # prefer radians based on project specifications
