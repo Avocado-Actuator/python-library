@@ -197,12 +197,12 @@ def main():
 
   comm = Communicator(port)
 
-  print(comm.rotate_at_velocity(1337, 50.0))
-  print(comm.rotate_at_current(1337, 50.0))
-  print(comm.rotate_to_position(1337, 50.0))
-  print(comm.get_velocity(1337))
-  print(comm.get_position(1337))
-  print(comm.get_current(1337))
+  print(comm.rotate_at_velocity(1, 50.0))
+  print(comm.rotate_at_current(2, 50.0))
+  print(comm.rotate_to_position(1, 50.0))
+  print(comm.get_velocity(1))
+  print(comm.get_position(2))
+  print(comm.get_current(1))
   del comm
 
 if __name__ == "__main__":
