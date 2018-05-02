@@ -180,7 +180,9 @@ class Communicator:
         the contents of the receive buffer
     """
     lines = self.ser.readlines()
-    return lines[0] if len(lines) == 1 else lines
+    if(len(lines) > 1): raise ValueError("Multiline buffer returned")
+
+    return lines[0].decode("utf-8").replace(STOP_BYTE, ' ') if lines else []
 
 def main():
   print("\n*** Running main function ***\n")
