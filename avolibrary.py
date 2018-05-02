@@ -67,7 +67,7 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    pos_message: str = f'setpos {pos}'
+    pos_message: str = f'set pos {pos}'
     self._send_to_mcu(addr, pos_message)
     # currently pretending read_from_mcu returns strings
     response: str = self._read_from_mcu()
@@ -92,7 +92,7 @@ class Communicator:
 
     # currently pretending send_to_mcu accepts strings
     # vel_message: str = f'some message here plus insert given vel {vel}'
-    vel_message: str = f'setvel {vel}'
+    vel_message: str = f'set vel {vel}'
     self._send_to_mcu(addr, vel_message)
     # currently pretending read_from_mcu returns strings
     response: str = self._read_from_mcu()
@@ -113,7 +113,7 @@ class Communicator:
     # the below is pseudocode and should not be expected to run
 
     # currently pretending send_to_mcu accepts strings
-    cur_message: str = f'setcur {cur}'
+    cur_message: str = f'set cur {cur}'
     self._send_to_mcu(addr, cur_message)
     # currently pretending read_from_mcu returns strings
     response: str = self._read_from_mcu()
@@ -129,7 +129,7 @@ class Communicator:
       Returns:
         the response of the mcu
     """
-    self._send_to_mcu(addr, 'getpos')
+    self._send_to_mcu(addr, 'get pos')
     response: str = self._read_from_mcu()
     return response
 
@@ -142,7 +142,7 @@ class Communicator:
       Returns:
         the response of the mcu
     """
-    self._send_to_mcu(addr, 'getvel')
+    self._send_to_mcu(addr, 'get vel')
     response: str = self._read_from_mcu()
     return response
 
@@ -155,7 +155,7 @@ class Communicator:
       Returns:
         the response of the mcu
     """
-    self._send_to_mcu(addr, 'getcur')
+    self._send_to_mcu(addr, 'get cur')
     response: str = self._read_from_mcu()
     return response
 
