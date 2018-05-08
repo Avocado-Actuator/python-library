@@ -28,13 +28,14 @@ CRC_TABLE = [
     0xd0, 0xee, 0xac, 0x92, 0x28, 0x16, 0x54, 0x6a, 0x45, 0x7b, 0x39, 0x07,
     0xbd, 0x83, 0xc1, 0xff]
 
-def crc8(crc: bytes, msg: str) -> bytes:
+def crc8(crc: int, msg: str) -> bytes:
   if msg == '':
     return bytes.fromhex('00')
   crc &= 0xff
   for c in msg:
     crc = CRC_TABLE[crc ^ bytes(c, 'ascii')[0]]
-  return crc
+    print('c: ' + str(crc))
+  return bytes([crc])
 
 class PosUnit(Enum):
   RADIANS = 1 # prefer radians based on project specifications
